@@ -16,7 +16,7 @@ public class DetallePedido {
     public DetallePedido(Producto producto, Pedido pedido, Revendedora revendedora) {
         this.producto = producto;
         this.pedido = pedido;
-        this.revendedora = revendedora;
+       
     }
 
     public DetallePedido() {
