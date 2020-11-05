@@ -6,10 +6,17 @@ public class DetallePedido {
     private int idDetalle;
     private Producto producto;
     private Pedido pedido;
+   
 
     public DetallePedido(Producto producto, Pedido pedido) {
         this.producto = producto;
         this.pedido = pedido;
+    }
+
+    public DetallePedido(Producto producto, Pedido pedido, Revendedora revendedora) {
+        this.producto = producto;
+        this.pedido = pedido;
+        this.revendedora = revendedora;
     }
 
     public DetallePedido() {

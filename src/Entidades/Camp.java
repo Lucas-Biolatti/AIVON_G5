@@ -10,6 +10,7 @@ public class Camp {
     private LocalDate fechaCierre;
     private double montoMin;
     private double montoMax;
+    private int estrellasCampaña;
 
     public Camp(LocalDate fechaInicio, LocalDate fechaCierre, double montoMin, double montoMax) {
         this.fechaInicio = fechaInicio;
@@ -19,6 +20,14 @@ public class Camp {
     }
 
     public Camp() {
+    }
+
+    public int getEstrellasCampaña() {
+        return estrellasCampaña;
+    }
+
+    public void setEstrellasCampaña(int estrellasCampaña) {
+        this.estrellasCampaña = estrellasCampaña;
     }
 
     public int getIdCamp() {

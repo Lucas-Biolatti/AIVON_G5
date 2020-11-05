@@ -101,6 +101,7 @@ public class RevendedoraData {
     }
     }
     
+    
     public List<Revendedora> obtenerRevendedoras(){
     Revendedora r=new Revendedora();
     List<Revendedora> revendedoras=new ArrayList<>();
@@ -125,5 +126,7 @@ public class RevendedoraData {
        }
     return revendedoras;
     }
+    
+    
     
 }

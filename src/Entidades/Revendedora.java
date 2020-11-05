@@ -8,7 +8,7 @@ public class Revendedora {
     private String nombreCompleto;
     private String dni;
     private boolean estado;
-    private Camp campaña;
+   
 
     public Revendedora(String tel, String mail, String nombreCompleto, String dni, boolean estado, Camp campaña) {
         this.tel = tel;
@@ -16,10 +16,13 @@ public class Revendedora {
         this.nombreCompleto = nombreCompleto;
         this.dni = dni;
         this.estado = estado;
-        this.campaña = campaña;
+       
     }
 
     public Revendedora() {
+    }
+    public void bajaPorInactividad(){
+    
     }
 
     public int getIdRevendedora() {
@@ -70,17 +73,11 @@ public class Revendedora {
         this.estado = estado;
     }
 
-    public Camp getCampaña() {
-        return campaña;
-    }
-
-    public void setCampaña(Camp campaña) {
-        this.campaña = campaña;
-    }
-
+    
+    
     @Override
     public String toString() {
-        return "Revendedora{" + "idRevendedora=" + idRevendedora + ", mail=" + mail + ", nombreCompleto=" + nombreCompleto + ", estado=" + estado + ", campa\u00f1a=" + campaña + '}';
+        return "Revendedora{" + "idRevendedora=" + idRevendedora + ", mail=" + mail + ", nombreCompleto=" + nombreCompleto + ", estado=" + estado + '}';
     }
     
     
