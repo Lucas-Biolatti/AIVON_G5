@@ -8,14 +8,38 @@ public class Revendedora {
     private String nombreCompleto;
     private String dni;
     private boolean estado;
-   
+    private int nivel;
 
-    public Revendedora(String tel, String mail, String nombreCompleto, String dni, boolean estado, Camp campaña) {
+    public int getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
+    }
+
+    public Revendedora(int idRevendedora) {
+        this.idRevendedora = idRevendedora;
+    }
+
+    public Revendedora(int idRevendedora, String tel, String mail, String nombreCompleto, String dni, boolean estado, int nivel) {
+        this.idRevendedora = idRevendedora;
         this.tel = tel;
         this.mail = mail;
         this.nombreCompleto = nombreCompleto;
         this.dni = dni;
         this.estado = estado;
+        this.nivel = nivel;
+    }
+   
+
+    public Revendedora(String tel, String mail, String nombreCompleto, String dni, boolean estado,int nivel) {
+        this.tel = tel;
+        this.mail = mail;
+        this.nombreCompleto = nombreCompleto;
+        this.dni = dni;
+        this.estado = estado;
+        this.nivel=nivel;
        
     }
 

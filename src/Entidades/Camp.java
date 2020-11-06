@@ -11,15 +11,35 @@ public class Camp {
     private double montoMin;
     private double montoMax;
     private int estrellasCampaña;
+    private boolean estadoCamp;
 
-    public Camp(LocalDate fechaInicio, LocalDate fechaCierre, double montoMin, double montoMax) {
+    public Camp(int idCamp, LocalDate fechaInicio, LocalDate fechaCierre, double montoMin, double montoMax, boolean estadoCamp) {
+        this.idCamp = idCamp;
         this.fechaInicio = fechaInicio;
         this.fechaCierre = fechaCierre;
         this.montoMin = montoMin;
         this.montoMax = montoMax;
+        this.estadoCamp = estadoCamp;
+    }
+
+    
+    public Camp(LocalDate fechaInicio, LocalDate fechaCierre, double montoMin, double montoMax,boolean estadoCamp) {
+        this.fechaInicio = fechaInicio;
+        this.fechaCierre = fechaCierre;
+        this.montoMin = montoMin;
+        this.montoMax = montoMax;
+        this.estadoCamp=estadoCamp;
     }
 
     public Camp() {
+    }
+
+    public boolean isEstadoCamp() {
+        return estadoCamp;
+    }
+
+    public void setEstadoCamp(boolean estadoCamp) {
+        this.estadoCamp = estadoCamp;
     }
 
     public int getEstrellasCampaña() {

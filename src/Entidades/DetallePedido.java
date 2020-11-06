@@ -6,6 +6,9 @@ public class DetallePedido {
     private int idDetalle;
     private Producto producto;
     private Pedido pedido;
+    private int cantProd;
+    private float subTotal;
+    private int nroCaja;
    
 
     public DetallePedido(Producto producto, Pedido pedido) {
@@ -19,6 +22,8 @@ public class DetallePedido {
        
     }
 
+   
+    
     public DetallePedido() {
     }
 

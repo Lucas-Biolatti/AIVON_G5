@@ -22,7 +22,7 @@ public class CampData {
     }
     
     public void agregarCampaña(Camp c){
-        String sql="INSERT INTO camp(fechaInicio, fechaCierre, montoMin, montoMax) VALUES (?,?,?,?)";
+        String sql="INSERT INTO camp(fechaInicio, fechaCierre, montoMin, montoMax,estadoCamp) VALUES (?,?,?,?,?)";
         
         try{
             PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
@@ -30,6 +30,7 @@ public class CampData {
             ps.setDate(2,Date.valueOf(c.getFechaCierre()));
             ps.setDouble(3,c.getMontoMin());
             ps.setDouble(4,c.getMontoMax());
+            ps.setBoolean(5,c.isEstadoCamp());
             ps.executeUpdate();
             ResultSet rs=ps.getGeneratedKeys();
             if(rs.next()){

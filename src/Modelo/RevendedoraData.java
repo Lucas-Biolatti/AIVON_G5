@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Modelo;
 
 import Entidades.Revendedora;
@@ -29,7 +25,7 @@ public class RevendedoraData {
     }
     
     public void agregarRevendedora(Revendedora r){
-    String sql="INSERT INTO revendedora(telefono,mail,nombreCompleto,dni,estado) VALUES (?,?,?,?,?)";
+    String sql="INSERT INTO revendedora( `telefono`, `mail`, `nombreCompleto`, `dni`, `estado`, `nivel`) VALUES (?,?,?,?,?,?);";
        try{ 
            PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
            ps.setString(1,r.getTel());
@@ -37,25 +33,21 @@ public class RevendedoraData {
            ps.setString(3,r.getNombreCompleto());
            ps.setString(4,r.getDni());
            ps.setBoolean(5,r.isEstado());
+           ps.setInt(6,r.getNivel());
            ps.executeUpdate();
            ResultSet rs=ps.getGeneratedKeys();
            if(rs.next()){
            r.setIdRevendedora(rs.getInt("idRevendedora"));
-           ps.close();
-           }else {
-               JOptionPane.showMessageDialog(null,"No se encontro el ID");
+           
            }
-           
-           
-           
-    
+            ps.close();
     }catch(SQLException e){
         JOptionPane.showMessageDialog(null,"No se pudo agregar Revendedora");
         }
     }
     
     public void actualizarRevendedora(int id,Revendedora r){
-    String sql="UPDATE revendedora SET telefono=?,mail=?,nombreCompleto=?,dni=?,estado=?, WHERE idRevendedora=?";
+    String sql="UPDATE revendedora SET telefono=?,mail=?,nombreCompleto=?,dni=?,estado=?,nivel=? WHERE idRevendedora=?";
     try{
         PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
         ps.setString(1,r.getTel());
@@ -64,6 +56,7 @@ public class RevendedoraData {
         ps.setString(4,r.getDni());
         ps.setBoolean(5,r.isEstado());
         ps.setInt(6,id);
+        ps.setInt(7,r.getNivel());
         ps.executeUpdate();
         ps.close();
         JOptionPane.showMessageDialog(null,"La revendedora con ID: "+id+" Fue actualizada correctamente");
@@ -87,6 +80,7 @@ public class RevendedoraData {
         JOptionPane.showMessageDialog(null,"No se pudo dar de baja");
     }
     }
+    
     public void darDeAlta(int id){
     String sql="UPDATE revendedora SET estado=1, WHERE idRevendedora=?;";
     
@@ -116,6 +110,7 @@ public class RevendedoraData {
         r.setDni(rs.getString("dni"));
         r.setEstado(rs.getBoolean("estado"));
         r.setIdRevendedora(rs.getInt("idRevendedora"));
+        r.setNivel(rs.getInt("nivel"));
         revendedoras.add(r);
      
     }

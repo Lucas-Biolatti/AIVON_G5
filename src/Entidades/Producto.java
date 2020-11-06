@@ -22,6 +22,17 @@ public class Producto {
         this.estadoProducto = estadoProducto;
     }
 
+    public Producto(int idProducto, String nombreProd, String uso, int tamañoCm3, double precioVenta, double precioCosto, int aporte, boolean estadoProducto) {
+        this.idProducto = idProducto;
+        this.nombreProd = nombreProd;
+        this.uso = uso;
+        this.tamañoCm3 = tamañoCm3;
+        this.precioVenta = precioVenta;
+        this.precioCosto = precioCosto;
+        this.aporte = aporte;
+        this.estadoProducto = estadoProducto;
+    }
+    
     public Producto() {
     }
 
