@@ -1,28 +1,68 @@
 
 package Entidades;
 
+import Modelo.Conexion;
+import Modelo.DetallePedidoData;
+import java.util.HashSet;
+import java.util.Set;
+
 public class DetallePedido {
     
     private int idDetalle;
     private Producto producto;
     private Pedido pedido;
     private int cantProd;
-    private float subTotal;
+    private double subTotal;
     private int nroCaja;
    
+
+    public DetallePedido(Producto producto, Pedido pedido,int cantProd,int nroCaja) {
+        this.producto = producto;
+        this.pedido = pedido;
+        this.cantProd=cantProd;
+        this.nroCaja=nroCaja;
+    }
 
     public DetallePedido(Producto producto, Pedido pedido) {
         this.producto = producto;
         this.pedido = pedido;
-    }
-
-    public DetallePedido(Producto producto, Pedido pedido, Revendedora revendedora) {
-        this.producto = producto;
-        this.pedido = pedido;
        
     }
+    public void calcularSubTotal(){
+    this.subTotal=(this.getProducto().getPrecioCosto()*this.getCantProd());
+        
+    
+    }
 
-   
+    public void agregarDetallePedido(){
+    DetallePedidoData dpd = new DetallePedidoData(new Conexion());
+    dpd.agregarDetallePedido(this);
+    
+    }
+
+    public int getCantProd() {
+        return cantProd;
+    }
+
+    public void setCantProd(int cantProd) {
+        this.cantProd = cantProd;
+    }
+
+    public double getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public int getNroCaja() {
+        return nroCaja;
+    }
+
+    public void setNroCaja(int nroCaja) {
+        this.nroCaja = nroCaja;
+    }
     
     public DetallePedido() {
     }

@@ -1,6 +1,12 @@
 
 package Entidades;
 
+import Modelo.CampData;
+import Modelo.Conexion;
+import Modelo.RevendedoraData;
+import java.time.LocalDate;
+import java.time.Period;
+
 public class Revendedora {
     private int idRevendedora;
     private String tel;
@@ -45,8 +51,18 @@ public class Revendedora {
 
     public Revendedora() {
     }
-    public void bajaPorInactividad(){
-    
+    public void comprobarEstado(){
+        RevendedoraData rd=new RevendedoraData(new Conexion());
+        CampData cd=new CampData(new Conexion());
+        //LocalDate up=rd.fechaUltimoPedido(this);
+        //LocalDate ucc=cd.cierreUltimaCampaña();
+        Period p=Period.between(rd.fechaUltimoPedido(this),cd.cierreUltimaCampaña());
+        System.out.println(p.getYears()*365+p.getMonths()*30+p.getDays());
+        if(Math.abs(p.getYears()*365+p.getMonths()*30+p.getDays())>74){
+        rd.darDeBaja(this.getIdRevendedora());
+        this.estado=false;
+            System.out.println("La Revendedora fue dada de baja Por inactividad");
+     }else System.out.println("Error");
     }
 
     public int getIdRevendedora() {

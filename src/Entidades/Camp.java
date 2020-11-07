@@ -1,7 +1,11 @@
 
 package Entidades;
 
+import Modelo.CampData;
+import Modelo.Conexion;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Camp {
     
@@ -32,6 +36,11 @@ public class Camp {
     }
 
     public Camp() {
+    }
+    public void cerrarCampaña(){
+    CampData cd=new CampData(new Conexion());
+    cd.cerrarCampaña(this);
+    this.setEstadoCamp(false);
     }
 
     public boolean isEstadoCamp() {

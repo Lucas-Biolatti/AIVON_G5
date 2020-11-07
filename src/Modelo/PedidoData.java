@@ -77,14 +77,16 @@ public class PedidoData {
     
     public List<Pedido> listaPedidos(){
         List<Pedido> p = new ArrayList<>();
-        Pedido pedidos = new Pedido();
-        Revendedora r= new Revendedora();
+        Pedido pedidos;
+        Revendedora r;
         
         String sql = "SELECT * FROM `pedido` WHERE estado = 1";
         try{
             PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
+                pedidos= new Pedido();
+                r=new Revendedora();
                 pedidos.setIdPedido(rs.getInt("idPedido"));
                 pedidos.setFechaIngreso(rs.getDate("fechaIngreso").toLocalDate());
                 pedidos.setFechaEntrega(rs.getDate("fechaEntrega").toLocalDate());
@@ -108,8 +110,9 @@ public class PedidoData {
     }
     
     public List<Producto> ListaProductos(Pedido p){
+        
+        Producto pr;
         ArrayList<Producto> productos = new ArrayList<>();
-        Producto pr = new Producto();
         String sql="SELECT producto.* FROM producto,pedido,detallepedido WHERE detallepedido.idPedido=? AND detallepedido.idProducto=producto.idProducto;";
     try{
     PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
@@ -118,6 +121,7 @@ public class PedidoData {
     ResultSet rs=ps.executeQuery();
     
     while(rs.next()){
+     pr=new Producto();
     pr.setIdProducto(rs.getInt("idProducto"));
     pr.setNombreProd(rs.getString("nombreProd"));
     pr.setUso(rs.getString("uso"));
@@ -127,7 +131,7 @@ public class PedidoData {
     pr.setAporte(rs.getInt("aporteEst"));
     pr.setEstadoProducto(rs.getBoolean("estadoProducto"));
     productos.add(pr);
-        System.out.println(pr);
+       
      }
        ps.close();
     
@@ -166,6 +170,7 @@ public class PedidoData {
         JOptionPane.showMessageDialog(null,"Error: No se pudo agregar");
     }
     }
+    
     public void pagarPedido(LocalDate fpago){
     String sql="UPDATE `pedido` SET `fechaPago`=? WHERE 1" ;
     try{
@@ -182,6 +187,7 @@ public class PedidoData {
     
     
     }
+    
     public void entregarPedido(LocalDate fEntrega){
     String sql="UPDATE `pedido` SET `fechaEntrega`=? WHERE 1" ;
     try{
@@ -198,6 +204,7 @@ public class PedidoData {
     
     
     }
+    
     public void cambiarEstado(Pedido p){
     String sql="UPDATE `pedido` SET `estado`=? WHERE pedido.idPedido=?";
     try{
@@ -211,7 +218,8 @@ public class PedidoData {
     }
     
     }
-   public Pedido buscarPedido(int id){
+    
+    public Pedido buscarPedido(int id){
    String sql="SELECT * FROM `pedido` WHERE pedido.idPedido=?;";
    Pedido p=new Pedido();
    Revendedora r=new Revendedora();
@@ -227,7 +235,8 @@ public class PedidoData {
     p.setFechaPago(rs.getDate("fechaPago").toLocalDate());
     p.setCajas(rs.getInt("cantCajas"));
     p.setImporte(rs.getDouble("importe"));
-    p.setEstrellaPedido(rs.getInt("estrellaPedido"));
+    p.setEstrellaPedido(rs.getInt("estrellasPedido"));
+    p.setEstado(rs.getBoolean("estado"));
     r.setIdRevendedora(rs.getInt("idRevendedora"));
     p.setRevendedora(r);
     c.setIdCamp(rs.getInt("idCamp"));
@@ -240,4 +249,79 @@ public class PedidoData {
    return p;
    }
     
+    public List<Pedido> listarPedidosCampaña(Camp c){
+       List<Pedido> pc=new ArrayList<>();
+       Revendedora r;
+       Pedido p;
+       Camp camp;
+       String sql="SELECT * FROM `pedido` WHERE pedido.idCamp=?";
+   try{
+   PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+   ps.setInt(1,c.getIdCamp());
+   ResultSet rs=ps.executeQuery();
+       System.out.println("La Campaña "+c.getIdCamp()+" tiene los siguientes Pedidos: ");
+   while(rs.next()){
+   p=new Pedido();
+   r=new Revendedora();
+   camp=new Camp();
+   p.setIdPedido(rs.getInt("idPedido"));
+   p.setFechaIngreso(rs.getDate("fechaIngreso").toLocalDate());
+   p.setFechaEntrega(rs.getDate("fechaEntrega").toLocalDate());
+   p.setFechaPago(rs.getDate("fechaPago").toLocalDate());
+   p.setCajas(rs.getInt("cantCajas"));
+   p.setEstado(rs.getBoolean("estado"));
+   r.setIdRevendedora(rs.getInt("idRevendedora"));
+   p.setRevendedora(r);
+   camp.setIdCamp(rs.getInt("idCamp"));
+   p.setCamp(camp);
+   p.setEstrellaPedido(rs.getInt("estrellasPedido"));
+   pc.add(p);
+       System.out.println("Pedido: "+p.getIdPedido()+" Estrellas: "+p.getEstrellaPedido());
+   }
+   ps.close();
+   }catch(SQLException e){
+   JOptionPane.showMessageDialog(null,"Error: No se pudo listar");
+   }
+   
+   return pc;
+   
+   }
+    
+    public List<Pedido> listarPedidosRevendedora(Revendedora c){
+       List<Pedido> pc=new ArrayList<>();
+       Revendedora r;
+       Pedido p;
+       Camp camp;
+       String sql="SELECT * FROM `pedido` WHERE pedido.idRevendedora=?";
+   try{
+   PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+   ps.setInt(1,c.getIdRevendedora());
+   ResultSet rs=ps.executeQuery();
+       System.out.println("La revendedora "+c.getNombreCompleto()+" tiene los siguientes pedidos: ");
+   while(rs.next()){
+   p=new Pedido();
+   r=new Revendedora();
+   camp=new Camp();
+   p.setIdPedido(rs.getInt("idPedido"));
+   p.setFechaIngreso(rs.getDate("fechaIngreso").toLocalDate());
+   p.setFechaEntrega(rs.getDate("fechaEntrega").toLocalDate());
+   p.setFechaPago(rs.getDate("fechaPago").toLocalDate());
+   p.setCajas(rs.getInt("cantCajas"));
+   p.setEstado(rs.getBoolean("estado"));
+   r.setIdRevendedora(rs.getInt("idRevendedora"));
+   p.setRevendedora(r);
+   camp.setIdCamp(rs.getInt("idCamp"));
+   p.setCamp(camp);
+   pc.add(p);
+       System.out.println("Pedido: "+p.getIdPedido()+" Campaña: "+p.getCamp().getIdCamp());
+   }
+   ps.close();
+   }catch(SQLException e){
+   JOptionPane.showMessageDialog(null,"Error: No se pudo listar");
+   }
+   
+   return pc;
+   
+   }
 }
+

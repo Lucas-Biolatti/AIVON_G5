@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.JOptionPane;
@@ -57,5 +58,31 @@ public class CampData {
     }catch(SQLException e){
         JOptionPane.showMessageDialog(null, "No se pudo actualizar la campaña");
     }
+    }
+    public void cerrarCampaña(Camp c){
+    
+    String sql="UPDATE camp SET estadoCamp=0";
+    try{
+    PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+    ps.executeUpdate();
+    ps.close();
+    }catch(SQLException e){
+        JOptionPane.showMessageDialog(null,"Error: No se pudo cerrar Campaña");
+    }
+    }
+    public LocalDate cierreUltimaCampaña(){
+    LocalDate x=null;
+        String sql="SELECT MAX(camp.fechaCierre) AS fechauc FROM `camp` WHERE 1";
+    try{
+    PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+    ResultSet rs=ps.executeQuery();
+    if(rs.next()){
+    x=rs.getDate("fechauc").toLocalDate();
+        System.out.println("La ultima Campaña cerro el: "+ x);
+    }
+    }catch(SQLException e){
+    JOptionPane.showMessageDialog(null,"No se consiguio la fecha");
+    }
+    return x;
     }
 }

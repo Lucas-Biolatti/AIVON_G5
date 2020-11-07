@@ -2,6 +2,7 @@
 package Entidades;
 
 import Modelo.Conexion;
+import Modelo.DetallePedidoData;
 import Modelo.PedidoData;
 import java.sql.Connection;
 import java.time.LocalDate;
@@ -34,6 +35,13 @@ public class Pedido {
         this.camp=camp;
     }
 
+    public Pedido(LocalDate fechaIngreso, int cajas, Revendedora revendedora, Camp camp) {
+        this.fechaIngreso = fechaIngreso;
+        this.cajas = cajas;
+        this.revendedora = revendedora;
+        this.camp = camp;
+    }
+
     public Pedido(int idPedido, LocalDate fechaIngreso, LocalDate fechaEntrega, LocalDate fechaPago, int cajas, boolean estado, Revendedora revendedora, Camp camp) {
         this.idPedido = idPedido;
         this.fechaIngreso = fechaIngreso;
@@ -56,9 +64,16 @@ public class Pedido {
         this.camp = camp;
     }
     
-    public int estrellasDelPedido(Pedido p){
+    public void agregarPedido(){
+    PedidoData pd=new PedidoData(new Conexion());
+    pd.agregarPedido(this);
+    }
+    
+    public void sumarEstrellasDelPedido(){
    PedidoData pd=new PedidoData(new Conexion());
-    return pd.sumarEstrellasPedido(p);
+   pd.sumarEstrellasP(this);
+    
+    this.estrellaPedido=pd.sumarEstrellasPedido(this);
     
     }
     
@@ -67,8 +82,16 @@ public class Pedido {
     pd.pagarPedido(fpago);
     this.fechaPago=fpago;
      System.out.println("Pago Exitoso");
+    }
+    
+    public void entregarPedido(LocalDate fEntrega){
+    PedidoData pd=new PedidoData(new Conexion());
+    pd.entregarPedido(fEntrega);
+    this.fechaEntrega=fEntrega;
+     System.out.println("Entrega Exitosa");
      
     }
+    
     public void cambiarEstado(){
     Period periodo=Period.between(this.getFechaPago(), this.getFechaEntrega());
        PedidoData pd=new PedidoData(new Conexion());
@@ -83,6 +106,16 @@ public class Pedido {
     }
     }
     
+    public List<Pedido> listarPedidoCampaña(Camp c){
+    PedidoData ps=new PedidoData(new Conexion());
+    return ps.listarPedidosCampaña(c);
+    }
+    
+    public List<Pedido> listarPedidoRevendedora(Revendedora r){
+        PedidoData pd=new PedidoData(new Conexion());
+        return pd.listarPedidosRevendedora(r);
+    }
+    
     public List<Producto> listarProductos(Pedido p){
        PedidoData pd=new PedidoData(new Conexion());
        
@@ -93,6 +126,11 @@ public class Pedido {
         return lineaPedido;
     }
 
+    public void craeLineaDetalle(){
+        DetallePedido d=new DetallePedido(new Producto(),this);
+        
+        }//Falta definir
+    
     public void setLineaPedido(ArrayList<DetallePedido> lineaPedido) {
         this.lineaPedido = lineaPedido;
     }
