@@ -33,7 +33,7 @@ public class Aivon {
     //////Crear y Agregar Revendedora a BD///////////
     RevendedoraData rd=new RevendedoraData(c);
    Revendedora r1=new Revendedora(2,"2154678352","kjhksjdhg@dsf.com","Maria","37592474",true,1);
-   
+    r1.modificarNivel();
     //r1.agregarRevendedora();
     //r1.comprobarEstado(); //Determina si esta activa o no dependiendo del ultimo pedido que hizo y la fecha de cierre de la ultima campaña
     //System.out.println(r1.isEstado());

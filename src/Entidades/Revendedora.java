@@ -19,13 +19,7 @@ public class Revendedora {
     private boolean estado;
     private int nivel;
 
-    public int getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(int nivel) {
-        this.nivel = nivel;
-    }
+   
     /////////////////Constructores////////////////////////
     
     public Revendedora(int idRevendedora) {
@@ -61,6 +55,26 @@ public class Revendedora {
         rd.agregarRevendedora(this);
     }
     
+    public void modificarNivel(){
+    RevendedoraData rd=new RevendedoraData(new Conexion());
+    int estrellas=0;
+    int n=0;
+    int resto=0;
+    estrellas=rd.estrallasPorRevendedora(this);
+    n=(estrellas/50)+1;
+    resto=estrellas%50;
+    if(estrellas<50){
+        this.setNivel(n);}
+    else{
+    this.setNivel(n);
+        
+    }    
+        System.out.println("El nivel de la revendedora es: "+this.getNivel());
+        System.out.println("Las estrellas restantes son: "+resto);
+    
+    }
+    
+    
     public void comprobarEstado(){
         RevendedoraData rd=new RevendedoraData(new Conexion());
         CampData cd=new CampData(new Conexion());
@@ -94,6 +108,14 @@ public class Revendedora {
     
     /////////////Getter and Setter//////////////////////
 
+     public int getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
+    }
+    
     public int getIdRevendedora() {
         return idRevendedora;
     }

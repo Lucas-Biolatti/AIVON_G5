@@ -137,4 +137,20 @@ public class RevendedoraData {
     return x;
     }
     
+    public int estrallasPorRevendedora(Revendedora r){
+        int x=0;
+    String sql="SELECT sum(pedido.estrellasPedido) AS total FROM pedido,revendedora WHERE pedido.idRevendedora=revendedora.idRevendedora and "
+            + "pedido.idRevendedora=?";
+    try{
+    PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+    ps.setInt(1,r.getIdRevendedora());
+    ResultSet rs=ps.executeQuery();
+    if(rs.next()){
+    x=rs.getInt("total");
+    }else{JOptionPane.showMessageDialog(null,"No se encontraron estrallas para la Revendedora "+r.getNombreCompleto());}
+    }catch(SQLException e){
+        JOptionPane.showMessageDialog(null,"Error: No se pudo obtener las estrellas");
+    }
+    return x;
+    }
 }
