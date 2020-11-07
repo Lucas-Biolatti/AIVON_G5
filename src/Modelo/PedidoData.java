@@ -18,15 +18,11 @@ import java.util.HashSet;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author agus_
- */
 public class PedidoData {
     private Connection con;
     
     
-    
+    //Constructor
     public PedidoData(Conexion conexion) {
         this.con = conexion.getConection();
     }
@@ -141,6 +137,8 @@ public class PedidoData {
     return productos;
     }
     
+    //Creamos dos metodos el sumarEstrellasPedido nos trae la suma de la consulta y el metodo que le sigue
+    //actualiza la base de datos. No sebemos si se podria realizar en el mismo metodo una consulta y una actualizacion a la vez.
     public int sumarEstrellasPedido(Pedido p){
     int x=0;
     String sql="SELECT sum(producto.aporteEst) AS total FROM producto,pedido,detallepedido WHERE detallepedido.idPedido=? AND detallepedido.idProducto=producto.idProducto;";
@@ -188,6 +186,7 @@ public class PedidoData {
     
     }
     
+    //Creamos el entregar pedido porque suponemos que si hacemos un pedido no se entraga automaticamente.
     public void entregarPedido(LocalDate fEntrega){
     String sql="UPDATE `pedido` SET `fechaEntrega`=? WHERE 1" ;
     try{
@@ -219,6 +218,7 @@ public class PedidoData {
     
     }
     
+    //Se creo el buscarPedido para poder ejecutar los metodos de prueba con datos directos de la BD.
     public Pedido buscarPedido(int id){
    String sql="SELECT * FROM `pedido` WHERE pedido.idPedido=?;";
    Pedido p=new Pedido();
@@ -249,6 +249,7 @@ public class PedidoData {
    return p;
    }
     
+    //Los ListarPedidos tienen dentro del metodo los System.out.Printl para poder ejecutar las pruebas
     public List<Pedido> listarPedidosCampaña(Camp c){
        List<Pedido> pc=new ArrayList<>();
        Revendedora r;

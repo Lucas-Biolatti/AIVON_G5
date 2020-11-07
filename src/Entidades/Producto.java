@@ -1,6 +1,9 @@
 
 package Entidades;
 
+import Modelo.Conexion;
+import Modelo.ProductoData;
+
 public class Producto {
     
     private int idProducto;
@@ -34,6 +37,11 @@ public class Producto {
     }
     
     public Producto() {
+    }
+    
+    void agregarProducto(){
+    ProductoData pd=new ProductoData(new Conexion());
+    pd.agregarProducto(this);
     }
 
     public int getIdProducto() {

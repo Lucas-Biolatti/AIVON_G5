@@ -44,6 +44,7 @@ public class CampData {
         }
     }
     
+    //solicitamos un id de campala y le seteamos  los datos de otra campaña.
     public void actualizarCampaña(int id,Camp c){
     String sql="UPDATE camp SET fechaInicio=?,fechaCierre=?,montoMin=?,montoMax=? WHERE idCamp=?;";
     try{
@@ -59,6 +60,7 @@ public class CampData {
         JOptionPane.showMessageDialog(null, "No se pudo actualizar la campaña");
     }
     }
+    
     public void cerrarCampaña(Camp c){
     
     String sql="UPDATE camp SET estadoCamp=0";
@@ -70,6 +72,8 @@ public class CampData {
         JOptionPane.showMessageDialog(null,"Error: No se pudo cerrar Campaña");
     }
     }
+    
+    //Obtenemos la fecha del ultimo cierre. lo usamos Para dar de baja o no una Revendedora por inactividad.
     public LocalDate cierreUltimaCampaña(){
     LocalDate x=null;
         String sql="SELECT MAX(camp.fechaCierre) AS fechauc FROM `camp` WHERE 1";

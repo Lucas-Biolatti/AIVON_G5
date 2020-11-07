@@ -37,11 +37,19 @@ public class Camp {
 
     public Camp() {
     }
+    
+    public void agregarCampaña(){
+        CampData cd=new CampData(new Conexion());
+        cd.agregarCampaña(this);
+    }
+    
     public void cerrarCampaña(){
     CampData cd=new CampData(new Conexion());
     cd.cerrarCampaña(this);
     this.setEstadoCamp(false);
     }
+    
+    /////////////////Getter and Setter////////////////
 
     public boolean isEstadoCamp() {
         return estadoCamp;

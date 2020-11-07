@@ -14,10 +14,7 @@ import java.util.List;
 import java.util.Set;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author lbiolatti
- */
+
 public class RevendedoraData {
     private Connection con;
     
@@ -83,7 +80,7 @@ public class RevendedoraData {
     }
     
     public void darDeAlta(int id){
-    String sql="UPDATE revendedora SET estado=1, WHERE idRevendedora=?;";
+    String sql="UPDATE revendedora SET estado=1 WHERE idRevendedora=?;";
     
     try{
         PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
@@ -95,7 +92,6 @@ public class RevendedoraData {
         JOptionPane.showMessageDialog(null,"No se pudo dar de baja");
     }
     }
-    
     
     public List<Revendedora> obtenerRevendedoras(){
     Revendedora r=new Revendedora();

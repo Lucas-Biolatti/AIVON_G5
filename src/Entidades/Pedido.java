@@ -25,6 +25,7 @@ public class Pedido {
     private Camp camp;
     private ArrayList<DetallePedido>lineaPedido ;
     
+    //Pedido completo
     public Pedido(LocalDate fechaIngreso, LocalDate fechaEntrega, LocalDate fechaPago, int cajas, boolean estado, Revendedora revendedora, Camp camp) {
         this.fechaIngreso = fechaIngreso;
         this.fechaEntrega = fechaEntrega;
@@ -34,14 +35,16 @@ public class Pedido {
         this.revendedora = revendedora;
         this.camp=camp;
     }
-
+    
+    //pedido sin fecha de entrega y fecha de pago
     public Pedido(LocalDate fechaIngreso, int cajas, Revendedora revendedora, Camp camp) {
         this.fechaIngreso = fechaIngreso;
         this.cajas = cajas;
         this.revendedora = revendedora;
         this.camp = camp;
     }
-
+   
+    //Pedido con id por contructor. Mas que nada para hacer algunas pruebas.
     public Pedido(int idPedido, LocalDate fechaIngreso, LocalDate fechaEntrega, LocalDate fechaPago, int cajas, boolean estado, Revendedora revendedora, Camp camp) {
         this.idPedido = idPedido;
         this.fechaIngreso = fechaIngreso;
@@ -53,16 +56,11 @@ public class Pedido {
         this.camp = camp;
     }
     
+    //Constructor vacio
     public Pedido() {
     }
 
-    public Camp getCamp() {
-        return camp;
-    }
-
-    public void setCamp(Camp camp) {
-        this.camp = camp;
-    }
+   
     
     public void agregarPedido(){
     PedidoData pd=new PedidoData(new Conexion());
@@ -129,11 +127,13 @@ public class Pedido {
     public void craeLineaDetalle(){
         DetallePedido d=new DetallePedido(new Producto(),this);
         
-        }//Falta definir
+        }//Falta definir  No sabemos como podriamos agregarle las caracteristicas de un producto sin pasarle nada como parametro.
     
     public void setLineaPedido(ArrayList<DetallePedido> lineaPedido) {
         this.lineaPedido = lineaPedido;
     }
+    
+    //////////////Geters and Setters////////////////
 
     public int getIdPedido() {
         return idPedido;
@@ -205,6 +205,14 @@ public class Pedido {
 
     public void setRevendedora(Revendedora revendedora) {
         this.revendedora = revendedora;
+    }
+    
+     public Camp getCamp() {
+        return camp;
+    }
+
+    public void setCamp(Camp camp) {
+        this.camp = camp;
     }
 
     @Override

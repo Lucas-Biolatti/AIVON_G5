@@ -28,6 +28,7 @@ public class DetallePedido {
         this.pedido = pedido;
        
     }
+    
     public void calcularSubTotal(){
     this.subTotal=(this.getProducto().getPrecioCosto()*this.getCantProd());
         
@@ -40,14 +41,12 @@ public class DetallePedido {
     
     }
 
-    public int getCantProd() {
-        return cantProd;
+    //No sabemos que datos necesitamos.
+    public DetallePedido() {
     }
-
-    public void setCantProd(int cantProd) {
-        this.cantProd = cantProd;
-    }
-
+    
+    /////////Getter and Setter//////////////
+    
     public double getSubTotal() {
         return subTotal;
     }
@@ -64,9 +63,14 @@ public class DetallePedido {
         this.nroCaja = nroCaja;
     }
     
-    public DetallePedido() {
+    public int getCantProd() {
+        return cantProd;
     }
 
+    public void setCantProd(int cantProd) {
+        this.cantProd = cantProd;
+    }
+    
     public int getIdDetalle() {
         return idDetalle;
     }
