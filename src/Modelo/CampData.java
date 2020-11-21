@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Set;
 import javax.swing.JOptionPane;
 
 public class CampData {
@@ -37,7 +36,8 @@ public class CampData {
             if(rs.next()){
             c.setIdCamp(rs.getInt("idCamp"));
                 
-            }else{JOptionPane.showMessageDialog(null,"No se pudo setear el ID");}
+            }
+            JOptionPane.showMessageDialog(null,"Se agrego la campaña con exito");
         ps.close();
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null,"No se pudo insertar La campaña");
@@ -45,7 +45,7 @@ public class CampData {
     }
     
     //solicitamos un id de campala y le seteamos  los datos de otra campaña.
-    public void actualizarCampaña(int id,Camp c){
+    public void actualizarCampaña(Camp c){
     String sql="UPDATE camp SET fechaInicio=?,fechaCierre=?,montoMin=?,montoMax=? WHERE idCamp=?;";
     try{
     PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
@@ -54,19 +54,23 @@ public class CampData {
     ps.setDate(2,Date.valueOf(c.getFechaCierre()));
     ps.setDouble(3,c.getMontoMin());
     ps.setDouble(3,c.getMontoMax());
-    ps.setInt(4,id);
+    ps.setInt(4,c.getIdCamp());
+    
+    JOptionPane.showMessageDialog(null,"Se Actualizo la campaña con exito");
     ps.close();
     }catch(SQLException e){
         JOptionPane.showMessageDialog(null, "No se pudo actualizar la campaña");
     }
     }
     
-    public void cerrarCampaña(Camp c){
+    public void cerrarCampaña(int id){
     
-    String sql="UPDATE camp SET estadoCamp=0";
+    String sql="UPDATE camp SET estadoCamp=0 where idCamp=?" ;
     try{
     PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+    ps.setInt(1, id);
     ps.executeUpdate();
+    JOptionPane.showMessageDialog(null,"Se dio de baja a la campaña N°"+id);
     ps.close();
     }catch(SQLException e){
         JOptionPane.showMessageDialog(null,"Error: No se pudo cerrar Campaña");
@@ -88,5 +92,51 @@ public class CampData {
     JOptionPane.showMessageDialog(null,"No se consiguio la fecha");
     }
     return x;
+    }
+    
+    public Camp buscarCampaña(int id){
+        Camp c=null;
+    String sql="select * from camp where idCamp=?";
+    try{
+    PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+    ps.setInt(1, id);
+    ResultSet rs= ps.executeQuery();
+    if(rs.next()){
+    c=new Camp();
+    c.setFechaInicio(rs.getDate("fechaInicio").toLocalDate());
+    c.setFechaCierre(rs.getDate("fechaCierre").toLocalDate());
+    c.setMontoMin(rs.getDouble("montoMin"));
+    c.setMontoMax(rs.getDouble("montoMax"));
+    c.setEstadoCamp(rs.getBoolean("estadoCamp"));
+    }
+    ps.close();
+    
+    }catch(SQLException e){
+        JOptionPane.showMessageDialog(null,"No se encontro Campaña");
+    }
+    return c;
+    }
+    public Camp campañaActiva(){
+        Camp c=null;
+        String sql = "SELECT * FROM camp WHERE estadoCamp=1";
+        try{
+        PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+        ResultSet rs=ps.executeQuery();
+        if(rs.next()){
+            c=new Camp();
+            c.setIdCamp(rs.getInt("idCamp"));
+            c.setFechaInicio(rs.getDate("fechaInicio").toLocalDate());
+            c.setFechaCierre(rs.getDate("fechaCierre").toLocalDate());
+            c.setMontoMin(rs.getDouble("montoMin"));
+            c.setMontoMax(rs.getDouble("montoMax"));
+            c.setEstadoCamp(rs.getBoolean("estadoCamp"));
+            
+            ps.close();
+        }
+        
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, "No se encontro la campaña");
+        }
+        return c;
     }
 }

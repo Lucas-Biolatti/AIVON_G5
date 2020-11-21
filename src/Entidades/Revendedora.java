@@ -166,7 +166,7 @@ public class Revendedora {
  
     @Override
     public String toString() {
-        return "Revendedora{" + "idRevendedora=" + idRevendedora + ", mail=" + mail + ", nombreCompleto=" + nombreCompleto + ", estado=" + estado + '}';
+        return idRevendedora +" - " + nombreCompleto;
     }
     
     

@@ -8,7 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.JOptionPane;
 
 public class ProductoData {
@@ -57,6 +59,18 @@ public class ProductoData {
     JOptionPane.showMessageDialog(null, "No se pudo dar de baja al producto");
         }
     }
+    public void darDeAltaProducto(int id){
+    String sql="UPDATE producto SET estadoProducto=1 WHERE idProducto=?;";
+    try{
+    PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+    ps.setInt(1, id);
+    ps.executeUpdate();
+    ps.close();
+    JOptionPane.showMessageDialog(null,"Se ha dado de Alta al producto: "+id);
+    }catch(SQLException e){
+    JOptionPane.showMessageDialog(null, "No se pudo dar de Alta al producto");
+        }
+    }
     
     public List<Producto> obtenerProductos(){
         List<Producto> productos=new ArrayList<>();
@@ -84,7 +98,7 @@ public class ProductoData {
     return productos;
     }
     
-    public void actualizarProducto(int id,Producto p){
+    public void actualizarProducto(Producto p){
     String sql="UPDATE producto SET nombreProd=?,uso=?,tamañoCm3=?,precioVenta=?,precioCosto=?,aporteEst=?,estadoProducto=? WHERE idProducto=?";
     try{
     PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
@@ -95,13 +109,41 @@ public class ProductoData {
     ps.setDouble(5,p.getPrecioCosto());
     ps.setInt(6,p.getAporte());
     ps.setBoolean(7,p.isEstadoProducto());
-    ps.setInt(8, id);
+    ps.setInt(8, p.getIdProducto());
     ps.executeUpdate();
+    
+    JOptionPane.showMessageDialog(null,"El producto se actualizo correctamente");
     ps.close();
     
     }catch(SQLException e){
         JOptionPane.showMessageDialog(null,"No se pudo modificar el producto");
     }
+    }
+    
+    public Producto buscarProducto(int id){
+        Producto p=null;
+        String sql="select * from producto where idProducto=?;";
+        try{
+        PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, id);
+        ResultSet rs=ps.executeQuery();
+        if(rs.next()){
+            p=new Producto();
+            p.setNombreProd(rs.getString("nombreProd"));
+            p.setUso(rs.getString("uso"));
+            p.setTamañoCm3(rs.getInt("tamañoCm3"));
+            p.setPrecioVenta(rs.getDouble("precioVenta"));
+            p.setPrecioCosto(rs.getDouble("precioCosto"));
+            p.setAporte(rs.getInt("aporteEst"));
+            p.setEstadoProducto(rs.getBoolean("estadoProducto"));
+        }
+        ps.close();
+        
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, "No se encontro el pedido");
+        }
+        
+        return p;
     }
     
 }

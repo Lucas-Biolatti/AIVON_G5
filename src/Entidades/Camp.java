@@ -38,16 +38,8 @@ public class Camp {
     public Camp() {
     }
     
-    public void agregarCampaña(){
-        CampData cd=new CampData(new Conexion());
-        cd.agregarCampaña(this);
-    }
-    
-    public void cerrarCampaña(){
-    CampData cd=new CampData(new Conexion());
-    cd.cerrarCampaña(this);
-    this.setEstadoCamp(false);
-    }
+  
+   
     
     /////////////////Getter and Setter////////////////
 
@@ -109,7 +101,7 @@ public class Camp {
 
     @Override
     public String toString() {
-        return idCamp + ", fechaInicio=" + fechaInicio + ", fechaCierre=" + fechaCierre + ", montoMin=" + montoMin + ", montoMax=" + montoMax + '}';
+        return ""+idCamp ;
     }
     
     

@@ -33,10 +33,13 @@ public class Aivon {
     //////Crear y Agregar Revendedora a BD///////////
     RevendedoraData rd=new RevendedoraData(c);
    Revendedora r1=new Revendedora(2,"2154678352","kjhksjdhg@dsf.com","Maria","37592474",true,1);
-    r1.modificarNivel();
+   //Revendedora rev=new Revendedora("2664123456","Juana@gmail.com","Juana, Perez","20123456",true,1);
+       // System.out.println(rd.buscarRevendedora(1));
     //r1.agregarRevendedora();
     //r1.comprobarEstado(); //Determina si esta activa o no dependiendo del ultimo pedido que hizo y la fecha de cierre de la ultima campaña
     //System.out.println(r1.isEstado());
+    //rd.agregarRevendedora(rev);
+      //  System.out.println(rd.obtenerRevendedoras());
    
     /////Crear y Agregar Campañas a bd/////////////
    Camp c1=new Camp(1,LocalDate.of(2020,4, 1),LocalDate.of(2020, 4, 26),5000,8000,true);
@@ -45,7 +48,7 @@ public class Aivon {
    CampData cd=new CampData(c);
    //cd.agregarCampaña(c1);
    //c2.agregarCampaña();
-   
+    //    System.out.println(cd.campañaActiva());
    /////Crear y Agregar Pedidos a la BD//////////////
    Pedido pedido=new Pedido(2,LocalDate.of(2020,4,5),LocalDate.of(2020, 4, 30),LocalDate.of(2020,4,14),2,true,r1,c1);
    Pedido pedido2=new Pedido(LocalDate.of(2020,4,5),LocalDate.of(2020, 4, 30),LocalDate.of(2020,4,14),2,true,r1,c1);

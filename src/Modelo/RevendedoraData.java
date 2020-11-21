@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.swing.JOptionPane;
 
 
@@ -23,7 +22,7 @@ public class RevendedoraData {
     }
     
     public void agregarRevendedora(Revendedora r){
-    String sql="INSERT INTO revendedora( `telefono`, `mail`, `nombreCompleto`, `dni`, `estado`, `nivel`) VALUES (?,?,?,?,?,?);";
+    String sql="INSERT INTO revendedora( telefono, mail, nombreCompleto, dni, estado, nivel) VALUES (?,?,?,?,?,?);";
        try{ 
            PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
            ps.setString(1,r.getTel());
@@ -36,7 +35,7 @@ public class RevendedoraData {
            ResultSet rs=ps.getGeneratedKeys();
            if(rs.next()){
            r.setIdRevendedora(rs.getInt("idRevendedora"));
-           
+           JOptionPane.showMessageDialog(null, "Revendedora agregada con exito");
            }
             ps.close();
     }catch(SQLException e){
@@ -44,7 +43,7 @@ public class RevendedoraData {
         }
     }
     //Preguntar si lo ejecutamos directo del data o como lo podriamos llevar al Revendedora.
-    public void actualizarRevendedora(int id,Revendedora r){
+    public void actualizarRevendedora(Revendedora r){
     String sql="UPDATE revendedora SET telefono=?,mail=?,nombreCompleto=?,dni=?,estado=?,nivel=? WHERE idRevendedora=?";
     try{
         PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
@@ -53,11 +52,11 @@ public class RevendedoraData {
         ps.setString(3,r.getNombreCompleto());
         ps.setString(4,r.getDni());
         ps.setBoolean(5,r.isEstado());
-        ps.setInt(6,id);
-        ps.setInt(7,r.getNivel());
+        ps.setInt(7,r.getIdRevendedora());
+        ps.setInt(6,r.getNivel());
         ps.executeUpdate();
         ps.close();
-        JOptionPane.showMessageDialog(null,"La revendedora con ID: "+id+" Fue actualizada correctamente");
+        JOptionPane.showMessageDialog(null,"La revendedora Fue actualizada correctamente");
    
     }catch(SQLException e){
         JOptionPane.showMessageDialog(null,"No se pudo actualizar la Revendedora");
@@ -72,6 +71,7 @@ public class RevendedoraData {
         PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
           ps.setInt(1,id);
           ps.executeUpdate();
+          JOptionPane.showMessageDialog(null, "Se dio de baja exitosamente");
           ps.close();
     
     }catch(SQLException e){
@@ -86,6 +86,7 @@ public class RevendedoraData {
         PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
           ps.setInt(1,id);
           ps.executeUpdate();
+          JOptionPane.showMessageDialog(null,"Se dio de Alta exitosamente");
           ps.close();
     
     }catch(SQLException e){
@@ -94,13 +95,14 @@ public class RevendedoraData {
     }
     
     public List<Revendedora> obtenerRevendedoras(){
-    Revendedora r=new Revendedora();
+    Revendedora r=null;
     List<Revendedora> revendedoras=new ArrayList<>();
     String sql="SELECT * FROM revendedora WHERE estado=1";
     try{
     PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
     ResultSet rs=ps.executeQuery();
     while(rs.next()){
+        r=new Revendedora();
         r.setTel(rs.getString("telefono"));
         r.setMail(rs.getString("mail"));
         r.setNombreCompleto(rs.getString("nombreCompleto"));
@@ -152,5 +154,28 @@ public class RevendedoraData {
         JOptionPane.showMessageDialog(null,"Error: No se pudo obtener las estrellas");
     }
     return x;
+    }
+
+    public Revendedora buscarRevendedora(int id){
+    String sql="Select * from revendedora Where idRevendedora=?;";
+        Revendedora r=null;
+        try{
+        PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, id);
+        ResultSet rs=ps.executeQuery();
+        if(rs.next()){
+        r=new Revendedora();
+        r.setTel(rs.getString("telefono"));
+        r.setMail(rs.getString("mail"));
+        r.setNombreCompleto(rs.getNString("nombreCompleto"));
+        r.setDni(rs.getString("dni"));
+        r.setNivel(rs.getInt("nivel"));
+        r.setEstado(rs.getBoolean("estado"));
+        }
+        ps.close();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null,"No se encontro Revendedora");
+        }
+        return r;
     }
 }

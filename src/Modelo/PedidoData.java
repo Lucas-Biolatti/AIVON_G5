@@ -56,6 +56,30 @@ public class PedidoData {
                          JOptionPane.showMessageDialog(null, "No se pudo agregar el pedido");                   
                      }
         }
+    public void actualizarPedido(Pedido p){
+       
+         String sql  = "UPDATE pedido SET fechaIngreso=?,fechaEntrega=?,fechaPago=?,cantCajas=?,estado=?,idRevendedora=?,idCamp=? WHERE idPedido=?;"; 
+                     
+                     try{
+                         PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                         
+                         ps.setDate(1, Date.valueOf(p.getFechaIngreso()));
+                         ps.setDate(2, Date.valueOf(p.getFechaEntrega()));
+                         ps.setDate(3, Date.valueOf(p.getFechaPago()));
+                         ps.setInt(4, p.getCajas());
+                         ps.setBoolean(5, p.isEstado());
+                         ps.setInt(6, p.getRevendedora().getIdRevendedora());
+                         ps.setInt(7, p.getCamp().getIdCamp());
+                         ps.setInt(8,p.getIdPedido());
+                        
+                         ps.executeUpdate();
+                         ps.close();
+                         JOptionPane.showMessageDialog(null, "El pedido fue actualizado con exito");
+                         
+                     }catch(SQLException e){
+                         JOptionPane.showMessageDialog(null, "No se pudo actualizar el pedido");                   
+                     }
+        }
  
     public void darDeBajaPedido(int id){
         String sql = "UPDATE 'pedido' SET 'estado'=0 WHERE 'idPedido'=?";
@@ -64,10 +88,25 @@ public class PedidoData {
             PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, id);
             ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Pedido "+id+" dado de baja");
             ps.close();
             
         }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "No se pudo dar de baja al pedido");
+        }   
+    }
+    public void darDeAltaPedido(int id){
+        String sql = "UPDATE 'pedido' SET 'estado'=1 WHERE 'idPedido'=?";
+        
+        try{
+            PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Pedido "+id+" dado de alta");
+            ps.close();
+            
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, "No se pudo dar de alta al pedido");
         }   
     }
     
@@ -101,6 +140,36 @@ public class PedidoData {
         }
         
         return p;
+        
+            
+    }
+    public Pedido buscarPedidos(int id){
+        Pedido pedidos=null;
+        Revendedora r;
+        
+        String sql = "SELECT * FROM `pedido` WHERE estado = 1 and idPedido=?";
+        try{
+            PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                pedidos= new Pedido();
+                r=new Revendedora();
+                pedidos.setFechaIngreso(rs.getDate("fechaIngreso").toLocalDate());
+                pedidos.setFechaEntrega(rs.getDate("fechaEntrega").toLocalDate());
+                pedidos.setFechaPago(rs.getDate("fechaPago").toLocalDate());
+                pedidos.setCajas(rs.getInt("cantCajas"));
+                pedidos.setImporte(rs.getDouble("importe"));
+                pedidos.setEstrellaPedido(rs.getInt("estrellaPedido"));
+                r.setIdRevendedora(rs.getInt("idRevendedora"));
+            }
+            ps.close();
+        
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, "No se pudo obtener el pedido");
+        }
+        
+        return pedidos;
         
             
     }

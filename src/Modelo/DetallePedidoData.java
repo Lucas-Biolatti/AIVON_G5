@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
 import javax.swing.JOptionPane;
 
 public class DetallePedidoData {
@@ -19,15 +20,17 @@ public class DetallePedidoData {
     
     public void agregarDetallePedido(DetallePedido dp){
     
-        String sql="INSERT INTO detallepedido(idPedido, idProducto) VALUES (?,?);";
+        String sql="INSERT INTO detallepedido(idPedido, idProducto,cantidad) VALUES (?,?,?);";
         try{
         PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1,dp.getPedido().getIdPedido());
         ps.setInt(2,dp.getProducto().getIdProducto());
+        ps.setInt(3, dp.getCantProd());
         ps.executeUpdate();
         ResultSet rs=ps.getGeneratedKeys();
         if(rs.next()){
             dp.setIdDetalle(rs.getInt("idDetalle"));
+            
         }else{
             JOptionPane.showMessageDialog(null,"No se encontro ID");
         }
