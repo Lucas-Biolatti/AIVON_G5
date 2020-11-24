@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-11-2020 a las 20:29:08
+-- Tiempo de generación: 24-11-2020 a las 05:33:48
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.4.10
 
@@ -53,16 +53,26 @@ INSERT INTO `camp` (`idCamp`, `fechaInicio`, `fechaCierre`, `montoMin`, `montoMa
 CREATE TABLE `detallepedido` (
   `idDetalle` int(11) NOT NULL,
   `idPedido` int(11) NOT NULL,
-  `idProducto` int(11) NOT NULL
+  `idProducto` int(11) NOT NULL,
+  `cantidad` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `detallepedido`
 --
 
-INSERT INTO `detallepedido` (`idDetalle`, `idPedido`, `idProducto`) VALUES
-(4, 2, 3),
-(5, 2, 4);
+INSERT INTO `detallepedido` (`idDetalle`, `idPedido`, `idProducto`, `cantidad`) VALUES
+(4, 2, 3, 5),
+(9, 2, 1, 1),
+(13, 3, 1, 2),
+(14, 3, 2, 1),
+(15, 4, 1, 4),
+(18, 4, 2, 1),
+(19, 4, 3, 5),
+(20, 2, 2, 2),
+(21, 5, 1, 1),
+(22, 5, 2, 2),
+(23, 5, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -88,8 +98,10 @@ CREATE TABLE `pedido` (
 --
 
 INSERT INTO `pedido` (`idPedido`, `fechaIngreso`, `fechaEntrega`, `fechaPago`, `cantCajas`, `estado`, `idRevendedora`, `idCamp`, `importe`, `estrellasPedido`) VALUES
-(2, '2020-04-05', '2020-04-10', '2020-04-30', 2, 1, 2, 1, NULL, 50),
-(3, '2020-04-07', '2020-04-30', '2020-04-14', 2, 1, 2, 1, NULL, 18);
+(2, '2020-04-05', '2020-04-10', '2020-04-30', 2, 1, 2, 1, 5695, 56),
+(3, '2020-04-07', '2020-04-30', '2020-04-14', 2, 1, 4, 1, 1790, 17),
+(4, '2020-11-15', '2020-11-17', '2020-11-17', 3, 1, 1, 2, 4130, 44),
+(5, '2021-09-23', '2020-09-29', '2020-09-24', 2, 1, 3, 2, 4345, 41);
 
 -- --------------------------------------------------------
 
@@ -114,9 +126,10 @@ CREATE TABLE `producto` (
 
 INSERT INTO `producto` (`idProducto`, `nombreProd`, `uso`, `tamañoCm3`, `precioVenta`, `precioCosto`, `aporteEst`, `estadoProducto`) VALUES
 (1, 'Lapiz Labial rojo', 'corporal', 60, 50, 45, 1, 1),
-(2, 'Perfume Hombre', 'corporal', 60, 2000, 1700, 10, 1),
+(2, 'Perfume Mujer', 'corporal', 40, 2000, 1700, 15, 1),
 (3, 'Crema de Afeitar', 'Cara', 50, 500, 450, 5, 1),
-(4, 'Crema de mano', 'diurno', 30, 100, 85, 5, 1);
+(4, 'Crema de mano', 'diurno', 30, 100, 85, 5, 1),
+(5, 'Jabon', 'Manos', 20, 50, 30, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -128,7 +141,7 @@ CREATE TABLE `revendedora` (
   `idRevendedora` int(11) NOT NULL,
   `telefono` varchar(13) NOT NULL,
   `mail` varchar(30) NOT NULL,
-  `nombreCompleto` varchar(11) NOT NULL,
+  `nombreCompleto` varchar(30) NOT NULL,
   `dni` varchar(8) NOT NULL,
   `estado` tinyint(1) NOT NULL,
   `nivel` int(11) NOT NULL
@@ -140,7 +153,11 @@ CREATE TABLE `revendedora` (
 
 INSERT INTO `revendedora` (`idRevendedora`, `telefono`, `mail`, `nombreCompleto`, `dni`, `estado`, `nivel`) VALUES
 (1, '2262656545', 'fasdfasd@sdfds.com', 'Maria, Chus', '32158548', 1, 1),
-(2, '2154678352', 'kjhksjdhg@dsf.com', 'Maria', '37592474', 0, 1);
+(2, '2664987654', 'mariasosa@gmail.com', 'Maria, Sosa', '12123456', 0, 2),
+(3, '2664123456', 'juana@gmail.com', 'Juana, Perez', '20123456', 1, 1),
+(4, '2664456080', 'angeles@hotmail.com', 'Angeles, Peres', '12456112', 0, 1),
+(5, '2664456789', 'claudia@gmail.com', 'claudia, silva', '12123456', 1, 1),
+(6, '2664789456', 'sole@gmail.com', 'soledad, asd', '22123456', 1, 1);
 
 --
 -- Índices para tablas volcadas
@@ -188,31 +205,31 @@ ALTER TABLE `revendedora`
 -- AUTO_INCREMENT de la tabla `camp`
 --
 ALTER TABLE `camp`
-  MODIFY `idCamp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `idCamp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `detallepedido`
 --
 ALTER TABLE `detallepedido`
-  MODIFY `idDetalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idDetalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `idPedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idPedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `idProducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idProducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `revendedora`
 --
 ALTER TABLE `revendedora`
-  MODIFY `idRevendedora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idRevendedora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restricciones para tablas volcadas
