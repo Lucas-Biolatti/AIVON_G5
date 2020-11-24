@@ -24,6 +24,7 @@ public class Aivon {
    
    ProductoData pd=new ProductoData(c);
    
+   
    ////////Crear y Agregar Productos a BD/////////////
    
     Producto p1= new Producto(3,"Crema de Afeitar","Cara",50,500,450,5,true); //Se crearon sin id pero se los inrustamos despues de creados para realizar algunas pruebas
@@ -40,6 +41,7 @@ public class Aivon {
     //System.out.println(r1.isEstado());
     //rd.agregarRevendedora(rev);
       //  System.out.println(rd.obtenerRevendedoras());
+        System.out.println(rd.buscarRevendedora(3));
    
     /////Crear y Agregar Campañas a bd/////////////
    Camp c1=new Camp(1,LocalDate.of(2020,4, 1),LocalDate.of(2020, 4, 26),5000,8000,true);
@@ -53,8 +55,9 @@ public class Aivon {
    Pedido pedido=new Pedido(2,LocalDate.of(2020,4,5),LocalDate.of(2020, 4, 30),LocalDate.of(2020,4,14),2,true,r1,c1);
    Pedido pedido2=new Pedido(LocalDate.of(2020,4,5),LocalDate.of(2020, 4, 30),LocalDate.of(2020,4,14),2,true,r1,c1);
    //pedido2.agregarPedido();
-   //PedidoData pdata=new PedidoData(c); // Se prueban de las dos maneras. desde la clase comun y la clase data
+  PedidoData pdata=new PedidoData(c); // Se prueban de las dos maneras. desde la clase comun y la clase data
    //pdata.agregarPedido(pedido);
+   //pdata.sumarEstrellasP(4,4);
   
    /////Crar  y Agregar DetallePedido a la BD//////
   DetallePedido dped=new DetallePedido(p1,pedido,3,1);
@@ -75,7 +78,7 @@ public class Aivon {
   //pedido.sumarEstrellasDelPedido();
   // pedido.listarPedidoCampaña(c1);
   // pedido.listarPedidoRevendedora(r1);
-  
+        //dpd.actualizarCantidad(4, 5);
       
     }
 }

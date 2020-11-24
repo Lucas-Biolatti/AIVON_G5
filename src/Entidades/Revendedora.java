@@ -48,65 +48,7 @@ public class Revendedora {
 
     public Revendedora() {
     }
-    ////////////////////////////////////////////
     
-    public void agregarRevendedora(){
-        RevendedoraData rd=new RevendedoraData(new Conexion());
-        rd.agregarRevendedora(this);
-    }
-    
-    public void modificarNivel(){
-    RevendedoraData rd=new RevendedoraData(new Conexion());
-    int estrellas=0;
-    int n=0;
-    int resto=0;
-    estrellas=rd.estrallasPorRevendedora(this);
-    n=(estrellas/50)+1;
-    resto=estrellas%50;
-    if(estrellas<50){
-        this.setNivel(n);}
-    else{
-    this.setNivel(n);
-        
-    }    
-        System.out.println("El nivel de la revendedora es: "+this.getNivel());
-        System.out.println("Las estrellas restantes son: "+resto);
-    
-    }
-    
-    
-    public void comprobarEstado(){
-        RevendedoraData rd=new RevendedoraData(new Conexion());
-        CampData cd=new CampData(new Conexion());
-        LocalDate up=rd.fechaUltimoPedido(this);
-        LocalDate ucc=cd.cierreUltimaCampaña();
-        /*  Optamos por calendar ya que nos da el resultado con mas exactitud.
-        Period p=Period.between(rd.fechaUltimoPedido(this),cd.cierreUltimaCampaña());
-        System.out.println(p.getYears()*365+p.getMonths()*30+p.getDays());
-        if(Math.abs(p.getYears()*365+p.getMonths()*30+p.getDays())>74){
-        rd.darDeBaja(this.getIdRevendedora());
-        this.estado=false;
-            System.out.println("La Revendedora fue dada de baja Por inactividad");
-     }else System.out.println("Error");*/
-        Calendar inicio=Calendar.getInstance();
-        inicio.set(up.getYear(),up.getMonthValue(),up.getDayOfMonth());
-        Calendar actual=Calendar.getInstance();
-        actual.set(ucc.getYear(),ucc.getMonthValue(),ucc.getDayOfMonth());
-        
-        long fin=actual.getTimeInMillis();
-        long inicioms=inicio.getTimeInMillis();
-        
-        int dias=(int) ((Math.abs(fin-inicioms))/(1000*60*60*24));
-        System.out.println("Los dias son: " + dias);
-        if(dias>74){
-        rd.darDeBaja(this.getIdRevendedora());
-        this.estado=false;
-            System.out.println("La Revendedora fue dada de baja Por inactividad");
-     }else System.out.println("Error");
-        
-    }
-    
-    /////////////Getter and Setter//////////////////////
 
      public int getNivel() {
         return nivel;

@@ -41,7 +41,7 @@ public class Camp {
   
    
     
-    /////////////////Getter and Setter////////////////
+   
 
     public boolean isEstadoCamp() {
         return estadoCamp;

@@ -8,6 +8,9 @@ package Vistas;
 import Entidades.Revendedora;
 import Modelo.Conexion;
 import Modelo.RevendedoraData;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,6 +28,28 @@ public class VistaRevendedora extends javax.swing.JInternalFrame {
         rd = new RevendedoraData(c);
     }
 
+       public void calcularNivel(){
+       int id;
+       id = Integer.parseInt(tId.getText());
+       rd.modificarNivel(id);
+       
+       }
+       public void ultimoPedido(){
+           int id;
+           id=Integer.parseInt(tId.getText());
+       SimpleDateFormat formato= new SimpleDateFormat("dd/MM/yyyy");
+       LocalDate ult;
+       
+       ult= rd.fechaUltimoPedido(id);
+       tUltimoPedido.setDate(Date.valueOf(ult));
+       }
+       
+       public void comprobarEstado(){
+       int id;
+       id=Integer.parseInt(tId.getText());
+           rd.comprobarEstado(id);
+       
+       }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -51,8 +76,15 @@ public class VistaRevendedora extends javax.swing.JInternalFrame {
         bAlta = new javax.swing.JButton();
         bLimpiar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        tUltimoPedido = new com.toedter.calendar.JDateChooser();
+        bVerificar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -133,6 +165,18 @@ public class VistaRevendedora extends javax.swing.JInternalFrame {
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/rev_1.png"))); // NOI18N
 
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel9.setText("Fecha de Ultimo pedido");
+
+        tUltimoPedido.setEnabled(false);
+
+        bVerificar.setText("Verificar Estado");
+        bVerificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bVerificarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -160,10 +204,14 @@ public class VistaRevendedora extends javax.swing.JInternalFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(53, 53, 53)
                         .addComponent(tId, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(tNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tNivel, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                            .addComponent(tUltimoPedido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -175,28 +223,32 @@ public class VistaRevendedora extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(25, Short.MAX_VALUE)
+                .addComponent(bGuardar)
+                .addGap(20, 20, 20)
+                .addComponent(bActualizar)
+                .addGap(20, 20, 20)
+                .addComponent(bBaja)
+                .addGap(20, 20, 20)
+                .addComponent(bAlta)
+                .addGap(20, 20, 20)
+                .addComponent(bLimpiar)
+                .addGap(53, 53, 53))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(107, 107, 107)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(bGuardar)
-                        .addGap(20, 20, 20)
-                        .addComponent(bActualizar)
-                        .addGap(20, 20, 20)
-                        .addComponent(bBaja)
-                        .addGap(20, 20, 20)
-                        .addComponent(bAlta)
-                        .addGap(20, 20, 20)
-                        .addComponent(bLimpiar)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                        .addGap(87, 87, 87)
+                        .addComponent(bVerificar)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -225,16 +277,21 @@ public class VistaRevendedora extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tNivel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tUltimoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel8))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bGuardar)
                     .addComponent(bActualizar)
                     .addComponent(bBaja)
                     .addComponent(bAlta)
                     .addComponent(bLimpiar))
-                .addGap(59, 59, 59))
+                .addGap(18, 18, 18)
+                .addComponent(bVerificar)
+                .addGap(61, 61, 61))
         );
 
         pack();
@@ -247,23 +304,26 @@ public class VistaRevendedora extends javax.swing.JInternalFrame {
 
     private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBuscarActionPerformed
         // TODO add your handling code here:
+        int id=Integer.parseInt(tId.getText());
         
         try{
-            int id;
+            
         Revendedora rev;
+     
+        calcularNivel();
         
-        id=Integer.parseInt(tId.getText());
         rev=rd.buscarRevendedora(id);
         
-        tNombre.setText(rev.getNombreCompleto()+"");
-        tDni.setText(rev.getDni()+"");
-        tTelefono.setText(rev.getTel()+"");
-        tmail.setText(rev.getMail()+"");
+        tNombre.setText(rev.getNombreCompleto());
+        tDni.setText(rev.getDni());
+        tTelefono.setText(rev.getTel());
+        tmail.setText(rev.getMail());
         tNivel.setText(rev.getNivel()+"");
         cActivo.setSelected(rev.isEstado());
         }catch(Exception e){
             JOptionPane.showMessageDialog(this,"No se encontro la revendedora que busca");
         }
+        
         
     }//GEN-LAST:event_bBuscarActionPerformed
 
@@ -299,6 +359,7 @@ public class VistaRevendedora extends javax.swing.JInternalFrame {
         String dni;
         boolean estado;
         int nivel;
+        ultimoPedido();
         
         id= Integer.parseInt(tId.getText());
         tel=tTelefono.getText();
@@ -336,8 +397,20 @@ public class VistaRevendedora extends javax.swing.JInternalFrame {
         tDni.setText("");
         cActivo.setSelected(false);
         tNivel.setText("");
+        tUltimoPedido.setDate(null);
         
     }//GEN-LAST:event_bLimpiarActionPerformed
+
+    private void bVerificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bVerificarActionPerformed
+        // TODO add your handling code here:
+           try{comprobarEstado();
+           ultimoPedido();
+           
+           }catch(Exception e){
+               JOptionPane.showMessageDialog(this, "La revendedora aun no posee un pedido");
+           }
+           
+    }//GEN-LAST:event_bVerificarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -347,6 +420,7 @@ public class VistaRevendedora extends javax.swing.JInternalFrame {
     private javax.swing.JButton bBuscar;
     private javax.swing.JButton bGuardar;
     private javax.swing.JButton bLimpiar;
+    private javax.swing.JButton bVerificar;
     private javax.swing.JCheckBox cActivo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -356,11 +430,13 @@ public class VistaRevendedora extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JTextField tDni;
     private javax.swing.JTextField tId;
     private javax.swing.JTextField tNivel;
     private javax.swing.JTextField tNombre;
     private javax.swing.JTextField tTelefono;
+    private com.toedter.calendar.JDateChooser tUltimoPedido;
     private javax.swing.JTextField tmail;
     // End of variables declaration//GEN-END:variables
 }

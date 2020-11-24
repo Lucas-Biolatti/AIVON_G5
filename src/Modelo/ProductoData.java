@@ -1,6 +1,8 @@
 
 package Modelo;
 
+import Entidades.DetallePedido;
+import Entidades.Pedido;
 import Entidades.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +12,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.swing.JOptionPane;
 
 public class ProductoData {
@@ -145,5 +146,70 @@ public class ProductoData {
         
         return p;
     }
+    
+    public ArrayList<Producto> productoNoSeleccionado(int p){
+   
+        ArrayList<Producto> productos = new ArrayList<>();
+             Producto product;
+        String sql="SELECT * FROM producto WHERE idProducto NOT IN(SELECT idProducto FROM detallepedido WHERE detallepedido.idPedido=?)";
+    
+                try{
+                    PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                    ps.setInt(1, p);
+                    ResultSet rs = ps.executeQuery();
+                    while(rs.next()){
+                    product = new Producto();
+                    product = buscarProducto(rs.getInt("idProducto"));
+                    product.setIdProducto(rs.getInt("idProducto"));
+                    /*product.setNombreProd(rs.getString("nombreProd"));
+                    product.setUso(rs.getString("uso"));
+                    product.setTamañoCm3(rs.getInt("tamañoCm3"));
+                    product.setPrecioVenta(rs.getDouble("precioVenta"));
+                    product.setPrecioCosto(rs.getDouble("precioCosto"));
+                    product.setAporte(rs.getInt(rs.getInt("aporteEst")));
+                    product.setEstadoProducto(rs.getBoolean("estadoProducto"));
+                    */
+                    productos.add(product);
+                    }
+                    ps.close();
+                    
+                }catch(SQLException e){
+                    JOptionPane.showMessageDialog(null,"No se encontraron los productos");
+                }
+                return productos;
+                
+                }
+    
+    public List<DetallePedido> listarDetallePorPedido(int id){
+        DetallePedido dp;
+        Producto prod;
+        Pedido ped;
+        List<DetallePedido> detalles = new ArrayList<>();
+        
+    String sql = "SELECT * FROM detallepedido WHERE idPedido=?";
+    try{
+    PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+    ps.setInt(1, id);
+    ResultSet rs = ps.executeQuery();
+    while(rs.next()){
+     prod = new Producto();
+    dp = new DetallePedido();
+    dp.setIdDetalle(rs.getInt("idDetalle"));
+    ped = new Pedido();
+    ped.setIdPedido(id);
+        
+    dp.setCantProd(rs.getInt("cantidad"));
+    prod = buscarProducto(rs.getInt("idProducto"));
+    prod.setIdProducto(rs.getInt("idProducto"));
+    dp.setProducto(prod);
+      detalles.add(dp);
+    }
+    
+    }catch(SQLException e){
+        JOptionPane.showMessageDialog(null, "No se encontraron los detalles");
+    }
+    return detalles;
+    }
+    
     
 }

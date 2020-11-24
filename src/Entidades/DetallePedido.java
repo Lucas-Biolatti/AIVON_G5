@@ -28,24 +28,18 @@ public class DetallePedido {
         this.pedido = pedido;
        
     }
-    
-    public void calcularSubTotal(){
-    this.subTotal=(this.getProducto().getPrecioCosto()*this.getCantProd());
-        
-    
+    public DetallePedido(Producto producto, Pedido pedido, int cantidad) {
+        this.producto = producto;
+        this.pedido = pedido;
+        cantProd = cantidad;
+       
     }
-
-    public void agregarDetallePedido(){
-    DetallePedidoData dpd = new DetallePedidoData(new Conexion());
-    dpd.agregarDetallePedido(this);
     
-    }
-
-    //No sabemos que datos necesitamos.
+   
     public DetallePedido() {
     }
     
-    /////////Getter and Setter//////////////
+
     
     public double getSubTotal() {
         return subTotal;

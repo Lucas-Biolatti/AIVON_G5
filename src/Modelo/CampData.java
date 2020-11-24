@@ -9,7 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class CampData {
@@ -138,5 +140,46 @@ public class CampData {
             JOptionPane.showMessageDialog(null, "No se encontro la campaña");
         }
         return c;
+    }
+    
+    public int estrellasPorCampaña(int idCamp){
+        int x=0;
+        String sql = "SELECT SUM(estrellasPedido) AS total FROM `pedido` WHERE `idCamp`=?";
+        try{
+        PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, idCamp);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next()){
+        x = rs.getInt("total");
+        }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "No se pudo calcular las estrellas para la campaña");
+        }
+        return x;
+    }
+    
+    public List<Camp> obtenerCampañas(){
+    Camp c;
+    List <Camp> campañas = new ArrayList<>();
+    String sql = "SELECT * FROM `camp`";
+    try{
+    PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+    ResultSet rs = ps.executeQuery();
+    while(rs.next()){
+    c = new Camp();
+    c.setIdCamp(rs.getInt("idCamp"));
+    c.setFechaInicio(rs.getDate("fechaInicio").toLocalDate());
+    c.setFechaCierre(rs.getDate("fechaCierre").toLocalDate());
+    c.setMontoMin(rs.getDouble("montoMin"));
+    c.setMontoMax(rs.getDouble("montoMax"));
+    c.setEstadoCamp(rs.getBoolean("estadoCamp"));
+    campañas.add(c);
+    
+    }
+    ps.close();
+    }catch(SQLException e){
+        JOptionPane.showMessageDialog(null, "No se pudo obtener el listado de campañas");
+        }
+    return campañas;
     }
 }

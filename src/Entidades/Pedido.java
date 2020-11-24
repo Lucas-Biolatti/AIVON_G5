@@ -59,75 +59,20 @@ public class Pedido {
     //Constructor vacio
     public Pedido() {
     }
+    
+     public Pedido(int id) {
+         this.idPedido=id;
+    }
+
 
    
     
-    public void agregarPedido(){
-    PedidoData pd=new PedidoData(new Conexion());
-    pd.agregarPedido(this);
-    }
-    
-    public void sumarEstrellasDelPedido(){
-   PedidoData pd=new PedidoData(new Conexion());
-   pd.sumarEstrellasP(this);
-    
-    this.estrellaPedido=pd.sumarEstrellasPedido(this);
-    
-    }
-    
-    public void pagarPedido(LocalDate fpago){
-    PedidoData pd=new PedidoData(new Conexion());
-    pd.pagarPedido(fpago);
-    this.fechaPago=fpago;
-     System.out.println("Pago Exitoso");
-    }
-    
-    public void entregarPedido(LocalDate fEntrega){
-    PedidoData pd=new PedidoData(new Conexion());
-    pd.entregarPedido(fEntrega);
-    this.fechaEntrega=fEntrega;
-     System.out.println("Entrega Exitosa");
-     
-    }
-    
-    public void cambiarEstado(){
-    Period periodo=Period.between(this.getFechaPago(), this.getFechaEntrega());
-       PedidoData pd=new PedidoData(new Conexion());
-       
-        if(Math.abs(periodo.getDays())<10){
-          this.setEstado(true);
-          pd.cambiarEstado(this);
-          }else {
-           this.setEstado(true);
-           pd.cambiarEstado(this);
-          
-    }
-    }
-    
-    public List<Pedido> listarPedidoCampaña(Camp c){
-    PedidoData ps=new PedidoData(new Conexion());
-    return ps.listarPedidosCampaña(c);
-    }
-    
-    public List<Pedido> listarPedidoRevendedora(Revendedora r){
-        PedidoData pd=new PedidoData(new Conexion());
-        return pd.listarPedidosRevendedora(r);
-    }
-    
-    public List<Producto> listarProductos(Pedido p){
-       PedidoData pd=new PedidoData(new Conexion());
-       
-    return pd.ListaProductos(p);
-    }
+   
 
     public ArrayList<DetallePedido> getLineaPedido() {
         return lineaPedido;
     }
 
-    public void craeLineaDetalle(){
-        DetallePedido d=new DetallePedido(new Producto(),this);
-        
-        }//Falta definir  No sabemos como podriamos agregarle las caracteristicas de un producto sin pasarle nada como parametro.
     
     public void setLineaPedido(ArrayList<DetallePedido> lineaPedido) {
         this.lineaPedido = lineaPedido;

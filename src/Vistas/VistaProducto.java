@@ -4,6 +4,7 @@ package Vistas;
 import Entidades.Producto;
 import Modelo.Conexion;
 import Modelo.ProductoData;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 
@@ -51,6 +52,10 @@ public class VistaProducto extends javax.swing.JInternalFrame {
         jLabel9 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -247,7 +252,7 @@ public class VistaProducto extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         int id;
         Producto p;
-        
+        try{
         id=Integer.parseInt(tId.getText());
         p=pd.buscarProducto(id);
         
@@ -258,6 +263,10 @@ public class VistaProducto extends javax.swing.JInternalFrame {
         tPCosto.setText(p.getPrecioCosto()+"");
         tEstrellas.setText(p.getAporte()+"");
         cEstado.setSelected(p.isEstadoProducto());
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, "El Producto no existe");
+                    
+        }
     }//GEN-LAST:event_bBuscarActionPerformed
 
     private void bGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGuardarActionPerformed

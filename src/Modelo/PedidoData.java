@@ -25,6 +25,8 @@ public class PedidoData {
     //Constructor
     public PedidoData(Conexion conexion) {
         this.con = conexion.getConection();
+       
+        
     }
 
     public void agregarPedido(Pedido p){
@@ -208,12 +210,12 @@ public class PedidoData {
     
     //Creamos dos metodos el sumarEstrellasPedido nos trae la suma de la consulta y el metodo que le sigue
     //actualiza la base de datos. No sebemos si se podria realizar en el mismo metodo una consulta y una actualizacion a la vez.
-    public int sumarEstrellasPedido(Pedido p){
+    public int sumarEstrellasPedido(int id){
     int x=0;
-    String sql="SELECT sum(producto.aporteEst) AS total FROM producto,pedido,detallepedido WHERE detallepedido.idPedido=? AND detallepedido.idProducto=producto.idProducto;";
+    String sql="SELECT SUM(producto.aporteEst*detallepedido.cantidad) AS total FROM producto,detallepedido WHERE detallepedido.idPedido=? AND detallepedido.idProducto=producto.idProducto";
     try{
     PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-    ps.setInt(1, p.getIdPedido());
+    ps.setInt(1, id);
     
     ResultSet rs=ps.executeQuery();
     if(rs.next()){
@@ -227,12 +229,15 @@ public class PedidoData {
     return x;
     }
     
-    public void sumarEstrellasP(Pedido p){
-    String sql="UPDATE `pedido` SET `estrellasPedido`=? WHERE pedido.idPedido=?";
+    public void sumarEstrellasP(int id,int id2){
+    String sql="UPDATE `pedido` SET `estrellasPedido`=(SELECT SUM(producto.aporteEst*detallepedido.cantidad) FROM producto,detallepedido WHERE detallepedido.idPedido=? AND detallepedido.idProducto=producto.idProducto) WHERE pedido.idPedido=?;";
     try{
     PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-    ps.setInt(2,p.getIdPedido());
-    ps.setInt(1,this.sumarEstrellasPedido(p));
+    
+    ps.setInt(1,id);
+    ps.setInt(2,id2);
+    ps.executeUpdate();
+    ps.close();
     }catch(SQLException e){
         JOptionPane.showMessageDialog(null,"Error: No se pudo agregar");
     }
@@ -320,6 +325,7 @@ public class PedidoData {
     
     //Los ListarPedidos tienen dentro del metodo los System.out.Printl para poder ejecutar las pruebas
     public List<Pedido> listarPedidosCampaña(Camp c){
+        RevendedoraData rd = new RevendedoraData(new Conexion());
        List<Pedido> pc=new ArrayList<>();
        Revendedora r;
        Pedido p;
@@ -340,11 +346,13 @@ public class PedidoData {
    p.setFechaPago(rs.getDate("fechaPago").toLocalDate());
    p.setCajas(rs.getInt("cantCajas"));
    p.setEstado(rs.getBoolean("estado"));
-   r.setIdRevendedora(rs.getInt("idRevendedora"));
+   //r.setIdRevendedora(rs.getInt("idRevendedora"));
+   r=rd.buscarRevendedora(rs.getInt("idRevendedora"));
    p.setRevendedora(r);
    camp.setIdCamp(rs.getInt("idCamp"));
    p.setCamp(camp);
    p.setEstrellaPedido(rs.getInt("estrellasPedido"));
+   p.setImporte(rs.getDouble("importe"));
    pc.add(p);
        System.out.println("Pedido: "+p.getIdPedido()+" Estrellas: "+p.getEstrellaPedido());
    }
@@ -367,7 +375,7 @@ public class PedidoData {
    PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
    ps.setInt(1,c.getIdRevendedora());
    ResultSet rs=ps.executeQuery();
-       System.out.println("La revendedora "+c.getNombreCompleto()+" tiene los siguientes pedidos: ");
+      
    while(rs.next()){
    p=new Pedido();
    r=new Revendedora();
@@ -380,10 +388,12 @@ public class PedidoData {
    p.setEstado(rs.getBoolean("estado"));
    r.setIdRevendedora(rs.getInt("idRevendedora"));
    p.setRevendedora(r);
+   p.setEstrellaPedido(rs.getInt("estrellasPedido"));
+   p.setImporte(rs.getDouble("importe"));
    camp.setIdCamp(rs.getInt("idCamp"));
    p.setCamp(camp);
    pc.add(p);
-       System.out.println("Pedido: "+p.getIdPedido()+" Campaña: "+p.getCamp().getIdCamp());
+      
    }
    ps.close();
    }catch(SQLException e){
@@ -393,5 +403,39 @@ public class PedidoData {
    return pc;
    
    }
+    
+    public double sumarImpotePedido(int id){
+    double x=0;
+    String sql="SELECT SUM(producto.precioCosto*detallepedido.cantidad) AS total FROM producto,detallepedido WHERE detallepedido.idPedido=? AND detallepedido.idProducto=producto.idProducto";
+    try{
+    PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+    ps.setInt(1, id);
+    
+    ResultSet rs=ps.executeQuery();
+    if(rs.next()){
+    x=rs.getDouble("total");
+    }
+    ps.close();
+        
+    }catch(SQLException e){
+        JOptionPane.showMessageDialog(null, "No se pudo obtener las estrellas");
+    }
+    return x;
+    }
+    
+    public void sumarImporteP(int id){
+    String sql="UPDATE `pedido` SET `importe`=? WHERE pedido.idPedido=?";
+    try{
+    PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+    ps.setInt(2,id);
+    ps.setDouble(1,this.sumarImpotePedido(id));
+    ps.executeUpdate();
+    ps.close();
+    }catch(SQLException e){
+        JOptionPane.showMessageDialog(null,"Error: No se pudo agregar");
+    }
+    }
+    
+    
 }
 

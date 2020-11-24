@@ -38,11 +38,11 @@ public class Producto {
     
     public Producto() {
     }
-    
-    void agregarProducto(){
-    ProductoData pd=new ProductoData(new Conexion());
-    pd.agregarProducto(this);
+     public Producto(int id) {
+         this.idProducto = id;
     }
+    
+    
 
     public int getIdProducto() {
         return idProducto;

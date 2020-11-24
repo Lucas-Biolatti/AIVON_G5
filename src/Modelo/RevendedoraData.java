@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -97,7 +98,7 @@ public class RevendedoraData {
     public List<Revendedora> obtenerRevendedoras(){
     Revendedora r=null;
     List<Revendedora> revendedoras=new ArrayList<>();
-    String sql="SELECT * FROM revendedora WHERE estado=1";
+    String sql="SELECT * FROM revendedora ";
     try{
     PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
     ResultSet rs=ps.executeQuery();
@@ -110,6 +111,7 @@ public class RevendedoraData {
         r.setEstado(rs.getBoolean("estado"));
         r.setIdRevendedora(rs.getInt("idRevendedora"));
         r.setNivel(rs.getInt("nivel"));
+        
         revendedoras.add(r);
      
     }
@@ -121,12 +123,12 @@ public class RevendedoraData {
     return revendedoras;
     }
     
-    public LocalDate fechaUltimoPedido(Revendedora r){
+    public LocalDate fechaUltimoPedido(int id){
     LocalDate x=null;
         String sql="SELECT MAX(pedido.`fechaIngreso`) AS fechaMax FROM `pedido`,detallepedido WHERE pedido.idRevendedora=?";
     try{
     PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-    ps.setInt(1,r.getIdRevendedora());
+    ps.setInt(1,id);
     ResultSet rs=ps.executeQuery();
     if(rs.next()){
     x=rs.getDate("fechaMax").toLocalDate();
@@ -139,21 +141,46 @@ public class RevendedoraData {
     return x;
     }
     
-    public int estrallasPorRevendedora(Revendedora r){
+    public int estrallasPorRevendedora(int id){
         int x=0;
     String sql="SELECT sum(pedido.estrellasPedido) AS total FROM pedido,revendedora WHERE pedido.idRevendedora=revendedora.idRevendedora and "
             + "pedido.idRevendedora=?";
     try{
     PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-    ps.setInt(1,r.getIdRevendedora());
+    ps.setInt(1,id);
     ResultSet rs=ps.executeQuery();
     if(rs.next()){
     x=rs.getInt("total");
-    }else{JOptionPane.showMessageDialog(null,"No se encontraron estrallas para la Revendedora "+r.getNombreCompleto());}
+    }else{JOptionPane.showMessageDialog(null,"No se encontraron estrallas para la Revendedora");}
     }catch(SQLException e){
         JOptionPane.showMessageDialog(null,"Error: No se pudo obtener las estrellas");
     }
     return x;
+    }
+    public void modificarNivel(int id){
+    
+        String sql = "UPDATE revendedora SET nivel=? WHERE idRevendedora=?";
+        try{
+            PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            
+    int estrellas=0;
+    int n=0;
+    int resto=0;
+    estrellas=estrallasPorRevendedora(id);
+    n=(estrellas/50)+1;
+    resto=estrellas%50;
+    //if(estrellas<50){
+        ps.setInt(1,n);
+        ps.setInt(2, id);
+        ps.executeUpdate();
+        //}
+    //else{
+    //this.setNivel(n);
+        
+    //}    
+    }catch (SQLException e){
+        JOptionPane.showMessageDialog(null, "No se pudo modificar el nivel");
+    }
     }
 
     public Revendedora buscarRevendedora(int id){
@@ -165,9 +192,10 @@ public class RevendedoraData {
         ResultSet rs=ps.executeQuery();
         if(rs.next()){
         r=new Revendedora();
+        r.setIdRevendedora(rs.getInt("idRevendedora"));
         r.setTel(rs.getString("telefono"));
         r.setMail(rs.getString("mail"));
-        r.setNombreCompleto(rs.getNString("nombreCompleto"));
+        r.setNombreCompleto(rs.getString("nombreCompleto"));
         r.setDni(rs.getString("dni"));
         r.setNivel(rs.getInt("nivel"));
         r.setEstado(rs.getBoolean("estado"));
@@ -177,5 +205,39 @@ public class RevendedoraData {
             JOptionPane.showMessageDialog(null,"No se encontro Revendedora");
         }
         return r;
+    }
+    
+    public void comprobarEstado(int id){
+        String sql="UPDATE revendedora SET `estado`=? WHERE idRevendedora=?";
+        try{
+            PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(2, id);
+        CampData cd = new CampData(new Conexion());
+    LocalDate up = this.fechaUltimoPedido(id);
+    LocalDate ucc = cd.cierreUltimaCampaña();
+    Calendar inicio=Calendar.getInstance();
+        inicio.set(up.getYear(),up.getMonthValue(),up.getDayOfMonth());
+        Calendar actual=Calendar.getInstance();
+        actual.set(ucc.getYear(),ucc.getMonthValue(),ucc.getDayOfMonth());
+        
+        long fin=actual.getTimeInMillis();
+        long inicioms=inicio.getTimeInMillis();
+        
+        int dias=(int) (Math.abs((fin-inicioms))/(1000*60*60*24));
+        
+        if(dias>74 && fin>inicioms){
+        ps.setInt(1, 0);
+        JOptionPane.showMessageDialog(null, "Esta revendedora fue dada de baja por inactividad");
+         }else{
+            ps.setInt(1,1);
+            JOptionPane.showMessageDialog(null, "El estado es Activo");
+        }
+        ps.executeUpdate();
+        
+        ps.close();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null,"No se pudo comprobar el estado");
+        }
+    
     }
 }

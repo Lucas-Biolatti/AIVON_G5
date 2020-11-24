@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javax.swing.JOptionPane;
 
 public class VistaCamp extends javax.swing.JInternalFrame {
     Conexion c;
@@ -17,6 +18,13 @@ public class VistaCamp extends javax.swing.JInternalFrame {
         initComponents();
         c=new Conexion();
         cd=new CampData(c);
+    }
+    
+    public void calcularEstrellas(){
+        int id;
+        id = Integer.parseInt(tId.getText());
+        tECamp.setText(cd.estrellasPorCampaña(id)+"");
+        
     }
 
     /** This method is called from within the constructor to
@@ -51,6 +59,10 @@ public class VistaCamp extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Id Campaña:");
@@ -208,9 +220,9 @@ public class VistaCamp extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jdFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tMmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -220,9 +232,7 @@ public class VistaCamp extends javax.swing.JInternalFrame {
                                     .addComponent(tMMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(95, 95, 95)
-                                .addComponent(tECamp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(tECamp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(100, 100, 100)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(bLimpiar)
@@ -238,7 +248,8 @@ public class VistaCamp extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGuardarActionPerformed
-       SimpleDateFormat formato=new SimpleDateFormat("dd/MM/yyyy");
+      
+        SimpleDateFormat formato=new SimpleDateFormat("dd/MM/yyyy");
         Camp c=null;
         LocalDate fini;
         LocalDate ffin;
@@ -257,6 +268,7 @@ public class VistaCamp extends javax.swing.JInternalFrame {
         c=new Camp(fini,ffin,mMin,mMax,estado);
         cd.agregarCampaña(c);
         tId.setText(c.getIdCamp()+"");
+        calcularEstrellas();
     }//GEN-LAST:event_bGuardarActionPerformed
 
     private void bActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bActualizarActionPerformed
@@ -280,7 +292,7 @@ public class VistaCamp extends javax.swing.JInternalFrame {
         estado=cEstado.isSelected();
         c=new Camp(id,fini,ffin,mMin,mMax,estado);
         cd.actualizarCampaña(c);
-        
+        calcularEstrellas();
 
     }//GEN-LAST:event_bActualizarActionPerformed
 
@@ -302,8 +314,8 @@ public class VistaCamp extends javax.swing.JInternalFrame {
         jdFin.setDate(null);
         tMmin.setText("");
         tMMax.setText("");
-        //tECamp
         cEstado.setSelected(false);
+        tECamp.setText("");
       
     }//GEN-LAST:event_bLimpiarActionPerformed
 
@@ -311,6 +323,7 @@ public class VistaCamp extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
        Camp c;
         int id;
+        try{
         id=Integer.parseInt(tId.getText());
         c=cd.buscarCampaña(id);
         
@@ -320,6 +333,9 @@ public class VistaCamp extends javax.swing.JInternalFrame {
         tMMax.setText(c.getMontoMax()+"");
         //tECamp
         cEstado.setSelected(c.isEstadoCamp());
+        calcularEstrellas();}catch(Exception e){
+            JOptionPane.showMessageDialog(this, "No se encontro la Campaña solicitada");
+        }
     }//GEN-LAST:event_bBuscarActionPerformed
 
     private void cEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cEstadoActionPerformed
@@ -328,12 +344,7 @@ public class VistaCamp extends javax.swing.JInternalFrame {
 
     private void tIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tIdActionPerformed
         // TODO add your handling code here:
-        jdInicio.setDate(null);
-        jdFin.setDate(null);
-        tMmin.setText("");
-        tMMax.setText("");
-        //tECamp
-        cEstado.setSelected(false);
+       
     }//GEN-LAST:event_tIdActionPerformed
 
 
